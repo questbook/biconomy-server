@@ -12,6 +12,9 @@ function getUsernameFromOauth(ouath: any, provider: any){
 function subsidize(req: express.Request, res: express.Response) {
     const address = getAddressFromTransaction(req.body.transaction);
     const username = getUsernameFromOauth(req.body.data.oauth, req.body.data.provider);
+    
+    // @TODO implement the logic of the check
+    
     // if (isValid(address) && isValid(username)) {
     //     return res.send(200)
     // }
