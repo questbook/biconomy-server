@@ -1,21 +1,21 @@
 import { ethers } from 'ethers'
 import { Handler } from '../utils/make-api'
-import { subsidize } from '../utils/config';
+import { subsidize } from "../utils/config" 
 
-const check: Handler<'transactionExecute'> = async(
+const check: Handler<'check'> = async(
 	{
-		transaction: signedTransaction, 
+		transaction, 
 		data
 	},
 	{ },
 	logger
 ) => {
 	
-    if(subsidize(signedTransaction, data)){
-        return "OK"
+    if(subsidize(transaction, data)){
+        return { answer: "OK" }
     }
     
-	return "NO";
+	return { answer: "NO" };
 }
 
 export default check

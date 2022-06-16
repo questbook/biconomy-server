@@ -8,7 +8,7 @@ function getUsernameFromOauth(oauth: string, provider: string){
     return oauth;
 }
 
-function subsidize(signedTransaction, data: {oauthToken: string, provider: string}) {
+export function subsidize(signedTransaction, data: {oauthToken: string, provider: string}) {
     const address = getAddressFromTransaction(signedTransaction);
     const username = getUsernameFromOauth(data.oauthToken, data.provider);
     

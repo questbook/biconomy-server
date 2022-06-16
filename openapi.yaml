@@ -14,7 +14,7 @@ paths:
       operationId: check
       summary: check if to subsidize gas or not
       tags:
-        - Transaction
+        - Subsidize
       requestBody:
         content:
           application/json:
