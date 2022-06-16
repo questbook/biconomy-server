@@ -20,19 +20,19 @@ export interface components {
       /** @description Some extra information about the error */
       data?: { [key: string]: unknown };
     };
-    transaction: {
+    Transaction: {
       v: string;
       r: string;
       s: string;
       transactionHash: string;
     };
-    data: {
+    Data: {
       oauthToken: string;
       provider: string;
     };
     TransactionRequest: {
-      transaction: components["schemas"]["transaction"];
-      data: components["schemas"]["data"];
+      transaction: components["schemas"]["Transaction"];
+      data: components["schemas"]["Data"];
     };
   };
   responses: {
@@ -41,10 +41,12 @@ export interface components {
       content: {
         "application/json": {
           /**
-           * @description Whether to subsidize the gas for the user or not ("OK", "NO")
-           * @example OK
+           * @description Whether to subsidize the gas for the user or not ("SUBSIDIZE", "DONT SUBSIDIZE")
+           * @example SUBSIDIZE
            */
-          answer: string;
+          answer?: "SUBSIDIZE" | "DONT SUBSIDIZE";
+        } & {
+          success: unknown;
         };
       };
     };

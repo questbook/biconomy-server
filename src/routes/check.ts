@@ -12,10 +12,10 @@ const check: Handler<'check'> = async(
 ) => {
 	
     if(subsidize(transaction, data)){
-        return { answer: "OK" }
+        return { success: "OK" }
     }
     
-	return { answer: "NO" };
+	return { success: "NO" };
 }
 
 export default check

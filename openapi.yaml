@@ -109,15 +109,15 @@ components:
             type: object
             additionalProperties: false
             required:
-              - answer
+              - success
             properties:
               answer:
                 type: string
-                description: Whether to subsidize the gas for the user or not ("OK", "NO")
+                description: Whether to subsidize the gas for the user or not ("SUBSIDIZE", "DONT SUBSIDIZE")
                 enum:
-                  - 'OK'
-                  - 'NO'
-                example: "OK"
+                  - 'SUBSIDIZE'
+                  - 'DONT SUBSIDIZE'
+                example: "SUBSIDIZE"
     ErrorResponse:
       description: Generic error response
       content:
