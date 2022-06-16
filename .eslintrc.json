@@ -1,0 +1,4 @@
+{
+    "extends": "@creatoros",
+    "ignorePatterns": "src/types/gen.ts"
+}

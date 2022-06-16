@@ -1,0 +1,123 @@
+openapi: 3.0.1
+info:
+  title: QuestBook Biconomy server
+  version: 0.1.0
+  description: Checks if we should subsidize gas for users
+servers:
+  - url:  # TODO insert correct url
+    description: Production server
+  - url: http://localhost:3001
+    description: Local server
+paths:
+  /check:
+    post:
+      operationId: check
+      summary: check if to subsidize gas or not
+      tags:
+        - Transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/TransactionResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - statusCode
+        - error
+        - message
+      properties:
+        statusCode:
+          type: integer
+          minLength: 200
+          maximum: 505
+        error:
+          type: string
+          description: Specific description of the error
+        message:
+          type: string
+          description: What the error was
+        data:
+          type: object
+          description: Some extra information about the error
+    transaction:
+      type: object
+      additionalProperties: false
+      required:
+        - v
+        - r
+        - s
+        - transactionHash
+      properties:
+        v:
+          type: string
+          minLength: 1
+          maxLength: 10
+        r:
+          type: string
+          minLength: 1
+          maxLength: 70
+        s:
+          type: string
+          minLength: 1
+          maxLength: 70
+        transactionHash:
+          type: string
+          minLength: 1
+          maxLength: 256
+    data:
+      type: object
+      additionalProperties: false
+      required:
+        - oauthToken
+        - provider
+      properties:
+        oauthToken:
+          type: string
+          minLength: 1
+          maxLength: 100
+        provider:
+          type: string
+          minLength: 1
+          maxLength: 100
+    TransactionRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - transaction
+        - data
+      properties:
+        transaction:
+          $ref: '#/components/schemas/transaction'
+        data:
+          $ref: '#/components/schemas/data'
+  responses:
+    TransactionResponse:
+      description: Subsidize gas for user
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - answer
+            properties:
+              answer:
+                type: string
+                description: Whether to subsidize the gas for the user or not ("OK", "NO")
+                example: "OK"
+    ErrorResponse:
+      description: Generic error response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
