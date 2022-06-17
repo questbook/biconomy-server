@@ -1,0 +1,34 @@
+service: qb-service-biconomy-server
+
+frameworkVersion: "3"
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: v0
+  region: ap-south-1
+  apiName: ${self:service}
+  versionFunctions: false
+  memorySize: 256
+  architecture: arm64
+
+functions:
+  api:
+    handler: src/functions/api.handler
+    timeout: 30
+    reservedConcurrency: 5
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+          
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+package:
+  include:
+    - openapi.yaml
