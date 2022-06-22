@@ -21,7 +21,7 @@ export interface components {
       data?: { [key: string]: unknown };
     };
     Transaction: {
-      v: string;
+      v: number;
       r: string;
       s: string;
       transactionHash: string;

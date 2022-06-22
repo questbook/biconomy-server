@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { Handler } from '../utils/make-api'
-import { subsidize } from "../utils/config" 
+import { subsidize } from "../utils/subsidize" 
 
 const check: Handler<'check'> = async(
 	{
@@ -11,11 +11,11 @@ const check: Handler<'check'> = async(
 	logger
 ) => {
 	
-    if(subsidize(transaction, data)){
-        return { success: "OK" }
+    if(await subsidize(transaction, data)){
+        return { success: "SUBSIDIZE" }
     }
     
-	return { success: "NO" };
+	return { success: "DONT SUBSIDIZE" };
 }
 
 export default check

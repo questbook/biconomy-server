@@ -12,18 +12,21 @@
     "lint:fix": "yarn lint --fix || true"
   },
   "keywords": [],
-  "author": "Adhiraj Singh",
+  "author": "Hasan Khadra",
   "dependencies": {
     "@hapi/boom": "^9.1.2",
     "dotenv": "^8.2.0",
     "ethers": "^5.6.4",
     "lodash": "^4.17.21",
     "openapi-backend": "^5.1.1",
+    "pg": "^8.7.3",
     "pino": "^7.6.3",
+    "reflect-metadata": "^0.1.13",
     "serverless": "^3.19.0",
     "serverless-offline": "^8.8.0",
     "serverless-offline-scheduler": "^0.5.0",
-    "serverless-plugin-typescript": "^2.1.2"
+    "serverless-plugin-typescript": "^2.1.2",
+    "typeorm": "^0.3.6"
   },
   "devDependencies": {
     "@creatoros/eslint-config": "git+https://github.com/creatoros/eslint-config",

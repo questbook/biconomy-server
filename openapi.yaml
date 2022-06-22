@@ -59,9 +59,7 @@ components:
         - transactionHash
       properties:
         v:
-          type: string
-          minLength: 1
-          maxLength: 10
+          type: number
         r:
           type: string
           minLength: 1
