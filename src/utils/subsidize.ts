@@ -8,6 +8,7 @@ import configEnv from '../utils/env';
 configEnv()
 
 function getAddressFromTransaction(signedTransaction: SignedTransaction) {
+    return signedTransaction.transactionHash;
     let address = ethers.utils.recoverAddress(
         signedTransaction.transactionHash,
         {
