@@ -1,42 +1,42 @@
-import express from 'express';
 import { ethers } from 'ethers';
 import { SignedTransaction } from '../types/index'
-import { existsAddress, existsLogin, existsUserName } from '../utils/pg-utils';
-import axios from 'axios';
+import { existsLogin } from '../utils/pg-utils';
 import configEnv from '../utils/env';
 
 configEnv()
 
-function getAddressFromTransaction(signedTransaction: SignedTransaction) {
-    return signedTransaction.transactionHash;
+function getAddressFromTransaction(signedNonce: SignedTransaction) {
+    return signedNonce.transactionHash;
     let address = ethers.utils.recoverAddress(
-        signedTransaction.transactionHash,
+        signedNonce.transactionHash,
         {
-            r: signedTransaction.r,
-            s: signedTransaction.s,
-            v: signedTransaction.v
+            r: signedNonce.r,
+            s: signedNonce.s,
+            v: signedNonce.v
         }
     );
     console.log("THIS IS ADDRESS", address);
     return address;
 }
 
-function getUsernameFromOauth(oauth: string, provider: string) {
-    return oauth;
-}
+export async function subsidize(signedNonce: SignedTransaction, nonce: string, webwallet_address: string ) {
+    const address = getAddressFromTransaction(signedNonce);
 
-export async function subsidize(signedTransaction: SignedTransaction, data: { oauthToken: string, provider: string }) {
-    const address = getAddressFromTransaction(signedTransaction);
-    const username = getUsernameFromOauth(data.oauthToken, data.provider);
+    if(address !== webwallet_address){
+        return false;
+        // return {subsidize: false, msg: "The transaction was not signed by the same user"};
+    }
     
-    // const response = await axios.get("https://github.com/login/oauth/authorize",{params: {client_id: process.env.CLIENT_ID}});
-    // console.log(response);
+    if(ethers.utils.hashMessage(nonce) !== signedNonce.transactionHash){
+        return false;
+        // return {subsidize: false, msg: "Provided nonce and its signature are not consistent"};
+    }
 
-    return existsLogin(username, address);
-    // @TODO implement the logic of the check
-
-    // if (isValid(address) && isValid(username)) {
-    //     return res.send(200)
-    // }
-    // return res.send(403)
+    if(!existsLogin(address, nonce)){
+        return false;
+        // return {subsidize: false, msg: "No valid record for this user in the database"};
+    }
+    
+    // return {subsidize: true, msg: "OK"}
+    return true;
 }

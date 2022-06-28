@@ -7,6 +7,12 @@ export interface paths {
   "/check": {
     post: operations["check"];
   };
+  "/get_nonce": {
+    get: operations["get_nonce"];
+  };
+  "/add_user": {
+    post: operations["add_user"];
+  };
 }
 
 export interface components {
@@ -26,16 +32,40 @@ export interface components {
       s: string;
       transactionHash: string;
     };
-    Data: {
-      oauthToken: string;
-      provider: string;
-    };
     TransactionRequest: {
-      transaction: components["schemas"]["Transaction"];
-      data: components["schemas"]["Data"];
+      data: {
+        signedNonce: components["schemas"]["Transaction"];
+        nonce: string;
+      };
+      webwallet_address: string;
+    };
+    AddUserRequest: {
+      code: string;
+      webwallet_address: string;
+    };
+    GetNonceRequest: {
+      webwallet_address: string;
     };
   };
   responses: {
+    /** Add user to database */
+    AddUserResponse: {
+      content: {
+        "application/json": {
+          authorize: string;
+        };
+      };
+    };
+    /** Get nonce for the user to sign */
+    GetNonceRequest: {
+      content: {
+        "application/json": {
+          authorize?: string;
+        } & {
+          nonce: unknown;
+        };
+      };
+    };
     /** Subsidize gas for user */
     TransactionResponse: {
       content: {
@@ -44,9 +74,7 @@ export interface components {
            * @description Whether to subsidize the gas for the user or not ("SUBSIDIZE", "DONT SUBSIDIZE")
            * @example SUBSIDIZE
            */
-          answer?: "SUBSIDIZE" | "DONT SUBSIDIZE";
-        } & {
-          success: unknown;
+          success: "SUBSIDIZE" | "DONT SUBSIDIZE";
         };
       };
     };
@@ -69,6 +97,30 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["TransactionRequest"];
+      };
+    };
+  };
+  get_nonce: {
+    responses: {
+      200: components["responses"]["GetNonceResponse"];
+      400: components["responses"]["ErrorResponse"];
+      500: components["responses"]["ErrorResponse"];
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GetNonceRequest"];
+      };
+    };
+  };
+  add_user: {
+    responses: {
+      200: components["responses"]["AddUserResponse"];
+      400: components["responses"]["ErrorResponse"];
+      500: components["responses"]["ErrorResponse"];
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddUserRequest"];
       };
     };
   };

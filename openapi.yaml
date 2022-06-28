@@ -27,6 +27,44 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         '500':
           $ref: '#/components/responses/ErrorResponse'
+
+
+  /get_nonce:
+    get:
+      operationId: get_nonce
+      summary: get nonce of the user to sign
+      tags:
+        - getNonce
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetNonceRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetNonceResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+  /add_user:
+    post:
+      operationId: add_user
+      summary: Retrieve the oauth token and add the user to the database
+      tags:
+        - Add user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/AddUserResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
 components:
   schemas:
     Error:
@@ -72,33 +110,83 @@ components:
           type: string
           minLength: 1
           maxLength: 256
-    Data:
-      type: object
-      additionalProperties: false
-      required:
-        - oauthToken
-        - provider
-      properties:
-        oauthToken:
-          type: string
-          minLength: 1
-          maxLength: 100
-        provider:
-          type: string
-          minLength: 1
-          maxLength: 100
     TransactionRequest:
       type: object
       additionalProperties: false
       required:
-        - transaction
         - data
+        - webwallet_address
       properties:
-        transaction:
-          $ref: '#/components/schemas/Transaction'
         data:
-          $ref: '#/components/schemas/Data'
+          type: object
+          additionalProperties: false
+          required:
+            - signedNonce
+            - nonce
+          properties:
+            signedNonce:
+              $ref: '#/components/schemas/Transaction'
+            nonce:
+              type: string
+              minLength: 1
+              maxLength: 256
+        webwallet_address:
+          type: string
+          minLength: 1
+          maxLength: 60
+    AddUserRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - webwallet_address
+      properties: 
+        code:
+          type: string
+          minLength: 1
+          maxLength: 100
+        webwallet_address:
+          type: string
+          minLength: 1
+          maxLength: 50
+    GetNonceRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - webwallet_address
+      properties: 
+        webwallet_address:
+          type: string
+          minLength: 1
+          maxLength: 50
+        
   responses:
+    AddUserResponse:
+      description: Add user to database
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - authorize
+            properties: 
+              authorize:
+                type: string
+    
+    GetNonceRequest:
+      description: Get nonce for the user to sign
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - nonce
+            properties: 
+              authorize:
+                type: string
+
     TransactionResponse:
       description: Subsidize gas for user
       content:
@@ -109,7 +197,7 @@ components:
             required:
               - success
             properties:
-              answer:
+              success:
                 type: string
                 description: Whether to subsidize the gas for the user or not ("SUBSIDIZE", "DONT SUBSIDIZE")
                 enum:
