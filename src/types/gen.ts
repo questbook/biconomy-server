@@ -8,7 +8,7 @@ export interface paths {
     post: operations["check"];
   };
   "/get_nonce": {
-    get: operations["get_nonce"];
+    post: operations["get_nonce"];
   };
   "/add_user": {
     post: operations["add_user"];
@@ -36,8 +36,9 @@ export interface components {
       data: {
         signedNonce: components["schemas"]["Transaction"];
         nonce: string;
+        webwallet_address: string;
       };
-      webwallet_address: string;
+      webwallet_address?: string;
     };
     AddUserRequest: {
       code: string;
@@ -52,17 +53,15 @@ export interface components {
     AddUserResponse: {
       content: {
         "application/json": {
-          authorize: string;
+          authorize: boolean;
         };
       };
     };
     /** Get nonce for the user to sign */
-    GetNonceRequest: {
+    GetNonceResponse: {
       content: {
         "application/json": {
-          authorize?: string;
-        } & {
-          nonce: unknown;
+          nonce: string;
         };
       };
     };
@@ -71,10 +70,10 @@ export interface components {
       content: {
         "application/json": {
           /**
-           * @description Whether to subsidize the gas for the user or not ("SUBSIDIZE", "DONT SUBSIDIZE")
-           * @example SUBSIDIZE
+           * @description Whether to subsidize the gas for the user or not (true, false)
+           * @example true
            */
-          success: "SUBSIDIZE" | "DONT SUBSIDIZE";
+          isConditionPassed: boolean;
         };
       };
     };

@@ -27,10 +27,8 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         '500':
           $ref: '#/components/responses/ErrorResponse'
-
-
   /get_nonce:
-    get:
+    post:
       operationId: get_nonce
       summary: get nonce of the user to sign
       tags:
@@ -47,12 +45,13 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         '500':
           $ref: '#/components/responses/ErrorResponse'
+          
   /add_user:
     post:
       operationId: add_user
       summary: Retrieve the oauth token and add the user to the database
       tags:
-        - Add user
+        - addUser
       requestBody:
         content:
           application/json:
@@ -115,7 +114,6 @@ components:
       additionalProperties: false
       required:
         - data
-        - webwallet_address
       properties:
         data:
           type: object
@@ -123,10 +121,15 @@ components:
           required:
             - signedNonce
             - nonce
+            - webwallet_address
           properties:
             signedNonce:
               $ref: '#/components/schemas/Transaction'
             nonce:
+              type: string
+              minLength: 1
+              maxLength: 256
+            webwallet_address: 
               type: string
               minLength: 1
               maxLength: 256
@@ -172,9 +175,9 @@ components:
               - authorize
             properties: 
               authorize:
-                type: string
+                type: boolean
     
-    GetNonceRequest:
+    GetNonceResponse:
       description: Get nonce for the user to sign
       content:
         application/json:
@@ -184,7 +187,7 @@ components:
             required:
               - nonce
             properties: 
-              authorize:
+              nonce:
                 type: string
 
     TransactionResponse:
@@ -195,15 +198,12 @@ components:
             type: object
             additionalProperties: false
             required:
-              - success
+              - isConditionPassed
             properties:
-              success:
-                type: string
-                description: Whether to subsidize the gas for the user or not ("SUBSIDIZE", "DONT SUBSIDIZE")
-                enum:
-                  - 'SUBSIDIZE'
-                  - 'DONT SUBSIDIZE'
-                example: "SUBSIDIZE"
+              isConditionPassed:
+                type: boolean
+                description: Whether to subsidize the gas for the user or not (true, false)
+                example: true
     ErrorResponse:
       description: Generic error response
       content:

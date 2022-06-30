@@ -27,15 +27,13 @@ export async function subsidize(signedNonce: SignedTransaction, nonce: string, w
         // return {subsidize: false, msg: "The transaction was not signed by the same user"};
     }
     
-    if(ethers.utils.hashMessage(nonce) !== signedNonce.transactionHash){
-        return false;
-        // return {subsidize: false, msg: "Provided nonce and its signature are not consistent"};
-    }
+    // @TODO: remove comment for production
+    // if(ethers.utils.hashMessage(nonce) !== signedNonce.transactionHash){
+    //     return false;
+    //     // return {subsidize: false, msg: "Provided nonce and its signature are not consistent"};
+    // }
 
-    if(!existsLogin(address, nonce)){
-        return false;
-        // return {subsidize: false, msg: "No valid record for this user in the database"};
-    }
+    return await existsLogin(address, nonce);
     
     // return {subsidize: true, msg: "OK"}
     return true;

@@ -4,20 +4,21 @@ import { subsidize } from "../utils/subsidize"
 
 const check: Handler<'check'> = async (
 	{
-		data,
-		webwallet_address
+		data
 	},
 	{ },
 	logger
 ) => {
 
-	let response = await subsidize(data.signedNonce, data.nonce, webwallet_address);
+	let response = await subsidize(data.signedNonce, data.nonce, data.webwallet_address);
+
+	console.log(response);
 
 	if (response === false) {
-		return { success: "DONT SUBSIDIZE" };
+		return { isConditionPassed: false };
 	}
 
-	return { success: "SUBSIDIZE" };
+	return { isConditionPassed: true };
 }
 
 export default check

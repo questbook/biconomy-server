@@ -9,11 +9,11 @@ const get_nonce: Handler<'get_nonce'> = async (
 	{ },
 	logger
 ) => {
-
-    let validNonce = getValidNonce(webwallet_address);
+	
+    let validNonce = await getValidNonce(webwallet_address);
 
     if(!validNonce){
-	    return { nonce: "Token expired. Please log in again." };
+	    return { nonce: "Token expired" };
     }
 
 	return { nonce: validNonce };

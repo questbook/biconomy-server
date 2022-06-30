@@ -33,9 +33,9 @@ export const getValidNonce = async (address: string) => {
     console.log("HERE OK")
     let results = await pool.query(`SELECT nonce, expiration FROM github_gasless_login WHERE address = '${address}' ORDER BY expiration DESC`);
     console.log("HERE OK")
-    console.log(results);
+    // console.log(results);
 
-    if(results.rows.length <= 0){
+    if(results.rows.length === 0){
         return false;
     }
 
@@ -50,11 +50,14 @@ export const getValidNonce = async (address: string) => {
 export const existsLogin = async (address: string, nonce: string) => {
     let results = await pool.query(`SELECT * FROM github_gasless_login WHERE address = '${address}' AND nonce = '${nonce}';`)
     
+    if(results.rows.length === 0)
+        return false;
+
     let expiration = results.rows[0].expiration;
 
     let cur_date = new Date().getTime() / 1000;
 
-    console.log(expiration, cur_date);
+    // console.log(expiration, cur_date);
 
     return expiration > cur_date;
         
@@ -62,7 +65,7 @@ export const existsLogin = async (address: string, nonce: string) => {
 
 export const addUser = async (address: string) => {
     let newNonce = createNonce(100);
-    await pool.query(`INSERT INTO github_gasless_login VALUES ('${address}', '${newNonce}', ${EXPIRATION});`)
+    await pool.query(`INSERT INTO github_gasless_login VALUES ('${address}', '${newNonce}', ${EXPIRATION + new Date().getTime() / 1000});`)
 }
 
 // export const deleteUser = async (username: string, address: string) => {
