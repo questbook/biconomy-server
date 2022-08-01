@@ -6,7 +6,6 @@ import configEnv from '../utils/env';
 configEnv()
 
 function getAddressFromTransaction(signedNonce: SignedTransaction) {
-    return signedNonce.transactionHash;
     let address = ethers.utils.recoverAddress(
         signedNonce.transactionHash,
         {
@@ -24,17 +23,11 @@ export async function subsidize(signedNonce: SignedTransaction, nonce: string, w
 
     if(address !== webwallet_address){
         return false;
-        // return {subsidize: false, msg: "The transaction was not signed by the same user"};
     }
     
-    // @TODO: remove comment for production
-    // if(ethers.utils.hashMessage(nonce) !== signedNonce.transactionHash){
-    //     return false;
-    //     // return {subsidize: false, msg: "Provided nonce and its signature are not consistent"};
-    // }
+    if(ethers.utils.hashMessage(nonce) !== signedNonce.transactionHash){
+        return false;
+    }
 
     return await existsLogin(address, nonce);
-    
-    // return {subsidize: true, msg: "OK"}
-    return true;
 }

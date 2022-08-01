@@ -27,25 +27,46 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
         '500':
           $ref: '#/components/responses/ErrorResponse'
-  /get_nonce:
+
+  /authorize_owner:
     post:
-      operationId: get_nonce
+      operationId: authorize_owner
       summary: get nonce of the user to sign
       tags:
-        - getNonce
+        - authorize_owner
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetNonceRequest'
+              $ref: '#/components/schemas/AuthorizeOwnerRequest'
       responses:
         '200':
-          $ref: '#/components/responses/GetNonceResponse'
+          $ref: '#/components/responses/AuthorizeOwnerResponse'
         '400':
           $ref: '#/components/responses/ErrorResponse'
         '500':
           $ref: '#/components/responses/ErrorResponse'
-          
+  
+  /add_workspace_owner:
+    post:
+      operationId: add_workspace_owner
+      summary: Add the workspace/DAO owner to the database and retrieve the apiKey and webhookId
+      tags:
+        - addWorkspaceOwner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkspaceOwnerRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/AddWorkspaceOwnerRespone'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+
+
   /add_user:
     post:
       operationId: add_user
@@ -60,6 +81,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/AddUserResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+  
+  /refresh_nonce:
+    post:
+      operationId: refresh_nonce
+      summary: refresh the user's nonce if expired
+      tags:
+        - refresh_nonce
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshNonceRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/RefreshNonceResponse'
         '400':
           $ref: '#/components/responses/ErrorResponse'
         '500':
@@ -86,6 +126,7 @@ components:
         data:
           type: object
           description: Some extra information about the error
+
     Transaction:
       type: object
       additionalProperties: false
@@ -109,6 +150,7 @@ components:
           type: string
           minLength: 1
           maxLength: 256
+
     TransactionRequest:
       type: object
       additionalProperties: false
@@ -137,22 +179,75 @@ components:
           type: string
           minLength: 1
           maxLength: 60
+
     AddUserRequest:
       type: object
       additionalProperties: false
       required:
-        - code
+        # - code
         - webwallet_address
       properties: 
-        code:
-          type: string
-          minLength: 1
-          maxLength: 100
+        # code:
+        #   type: string
+        #   minLength: 1
+        #   maxLength: 100
         webwallet_address:
           type: string
           minLength: 1
           maxLength: 50
-    GetNonceRequest:
+
+    RefreshNonceRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - webwallet_address
+      properties: 
+        webwallet_address:
+          type: string
+          minLength: 1
+          maxLength: 50
+
+    AddWorkspaceOwnerRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - webwallet_address
+        - scw_address
+        - workspace_id
+        - workspace_name
+        - chain_id
+        - safe_address
+        - safe_name
+      properties: 
+        scw_address:
+          type: string
+          minLength: 1
+          maxLength: 50
+        webwallet_address:
+          type: string
+          minLength: 1
+          maxLength: 50
+        workspace_id:
+          type: number
+        workspace_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        chain_id:
+          type: string
+          minLength: 1
+          maxLength: 100
+        safe_address:
+          type: string
+          minLength: 40
+          maxLength: 100
+        safe_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+
+
+    AuthorizeOwnerRequest:
       type: object
       additionalProperties: false
       required:
@@ -164,6 +259,27 @@ components:
           maxLength: 50
         
   responses:
+    AddWorkspaceOwnerRespone:
+      description: Add workspace owner to the database
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - status
+            properties: 
+              status:
+                type: boolean
+              webhook_id:
+                type: string
+                minLength: 1
+                maxLength: 100
+              funding_key:
+                type: string
+                minLength: 1
+                maxLength: 100
+                
     AddUserResponse:
       description: Add user to database
       content:
@@ -177,8 +293,8 @@ components:
               authorize:
                 type: boolean
     
-    GetNonceResponse:
-      description: Get nonce for the user to sign
+    RefreshNonceResponse:
+      description: Refresh the nonce of the user
       content:
         application/json:
           schema:
@@ -186,9 +302,27 @@ components:
             additionalProperties: false
             required:
               - nonce
+              - updated
             properties: 
+              updated:
+                type: boolean
               nonce:
                 type: string
+                minLength: 50
+                maxLength: 150
+    
+    AuthorizeOwnerResponse:
+      description: Get nonce for the user to sign
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - status
+            properties: 
+              nonce:
+                type: boolean
 
     TransactionResponse:
       description: Subsidize gas for user

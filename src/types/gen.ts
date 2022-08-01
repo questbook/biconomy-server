@@ -7,11 +7,17 @@ export interface paths {
   "/check": {
     post: operations["check"];
   };
-  "/get_nonce": {
-    post: operations["get_nonce"];
+  "/authorize_owner": {
+    post: operations["authorize_owner"];
+  };
+  "/add_workspace_owner": {
+    post: operations["add_workspace_owner"];
   };
   "/add_user": {
     post: operations["add_user"];
+  };
+  "/refresh_nonce": {
+    post: operations["refresh_nonce"];
   };
 }
 
@@ -41,14 +47,35 @@ export interface components {
       webwallet_address?: string;
     };
     AddUserRequest: {
-      code: string;
       webwallet_address: string;
     };
-    GetNonceRequest: {
+    RefreshNonceRequest: {
+      webwallet_address: string;
+    };
+    AddWorkspaceOwnerRequest: {
+      scw_address: string;
+      webwallet_address: string;
+      workspace_id: number;
+      workspace_name: string;
+      chain_id: string;
+      safe_address: string;
+      safe_name: string;
+    };
+    AuthorizeOwnerRequest: {
       webwallet_address: string;
     };
   };
   responses: {
+    /** Add workspace owner to the database */
+    AddWorkspaceOwnerRespone: {
+      content: {
+        "application/json": {
+          status: boolean;
+          webhook_id?: string;
+          funding_key?: string;
+        };
+      };
+    };
     /** Add user to database */
     AddUserResponse: {
       content: {
@@ -57,11 +84,22 @@ export interface components {
         };
       };
     };
-    /** Get nonce for the user to sign */
-    GetNonceResponse: {
+    /** Refresh the nonce of the user */
+    RefreshNonceResponse: {
       content: {
         "application/json": {
+          updated: boolean;
           nonce: string;
+        };
+      };
+    };
+    /** Get nonce for the user to sign */
+    AuthorizeOwnerResponse: {
+      content: {
+        "application/json": {
+          nonce?: boolean;
+        } & {
+          status: unknown;
         };
       };
     };
@@ -99,15 +137,27 @@ export interface operations {
       };
     };
   };
-  get_nonce: {
+  authorize_owner: {
     responses: {
-      200: components["responses"]["GetNonceResponse"];
+      200: components["responses"]["AuthorizeOwnerResponse"];
       400: components["responses"]["ErrorResponse"];
       500: components["responses"]["ErrorResponse"];
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["GetNonceRequest"];
+        "application/json": components["schemas"]["AuthorizeOwnerRequest"];
+      };
+    };
+  };
+  add_workspace_owner: {
+    responses: {
+      200: components["responses"]["AddWorkspaceOwnerRespone"];
+      400: components["responses"]["ErrorResponse"];
+      500: components["responses"]["ErrorResponse"];
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddWorkspaceOwnerRequest"];
       };
     };
   };
@@ -120,6 +170,18 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["AddUserRequest"];
+      };
+    };
+  };
+  refresh_nonce: {
+    responses: {
+      200: components["responses"]["RefreshNonceResponse"];
+      400: components["responses"]["ErrorResponse"];
+      500: components["responses"]["ErrorResponse"];
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RefreshNonceRequest"];
       };
     };
   };

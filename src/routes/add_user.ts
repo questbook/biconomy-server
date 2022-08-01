@@ -7,7 +7,7 @@ configEnv()
 
 const add_user: Handler<'add_user'> = async(
 	{
-		code, 
+		// code, 
 		webwallet_address
 	},
 	{ },
@@ -15,12 +15,12 @@ const add_user: Handler<'add_user'> = async(
 
 ) => {
 	
-	let res = await axios.post(`https://github.com/login/oauth/access_token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${code}`)
+	// let res = await axios.post(`https://github.com/login/oauth/access_token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${code}`)
 
-	console.log(res.data);
-	if(res.data.substring(0, 5) === "error"){
-		return { authorize: false}
-	}
+	// console.log(res.data);
+	// if(res.data.substring(0, 5) === "error"){
+	// 	return { authorize: false}
+	// }
 
 	addUser(webwallet_address);
     

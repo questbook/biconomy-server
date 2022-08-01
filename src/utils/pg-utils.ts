@@ -23,18 +23,10 @@ const createNonce = (length: number) => {
     return result;
 }
 
-// export const existsAddress = async (address: string) => {
-//     let results = await pool.query(`SELECT * FROM github_gasless_login WHERE address = '${address}';`)
-
-//     return results.rows.length > 0;
-// }
-
 export const getValidNonce = async (address: string) => {
-    console.log("HERE OK")
-    let results = await pool.query(`SELECT nonce, expiration FROM github_gasless_login WHERE address = '${address}' ORDER BY expiration DESC`);
-    console.log("HERE OK")
-    // console.log(results);
-
+    
+    let results = await pool.query(`SELECT nonce, expiration FROM gasless_login WHERE address = '${address}' ORDER BY expiration DESC`);
+    
     if(results.rows.length === 0){
         return false;
     }
@@ -48,7 +40,7 @@ export const getValidNonce = async (address: string) => {
 }
 
 export const existsLogin = async (address: string, nonce: string) => {
-    let results = await pool.query(`SELECT * FROM github_gasless_login WHERE address = '${address}' AND nonce = '${nonce}';`)
+    let results = await pool.query(`SELECT * FROM gasless_login WHERE address = '${address}' AND nonce = '${nonce}';`)
     
     if(results.rows.length === 0)
         return false;
@@ -57,19 +49,32 @@ export const existsLogin = async (address: string, nonce: string) => {
 
     let cur_date = new Date().getTime() / 1000;
 
-    // console.log(expiration, cur_date);
-
     return expiration > cur_date;
         
 }
 
 export const addUser = async (address: string) => {
     let newNonce = createNonce(100);
-    await pool.query(`INSERT INTO github_gasless_login VALUES ('${address}', '${newNonce}', ${EXPIRATION + new Date().getTime() / 1000});`)
+    await pool.query(`INSERT INTO gasless_login VALUES ('${address}', '${newNonce}', ${EXPIRATION + new Date().getTime() / 1000});`)
 }
 
-// export const deleteUser = async (username: string, address: string) => {
-//     await pool.query(`DELETE FROM github_gasless_login WHERE username = '${username}' AND address = '${address}'`);
-// }
+export const addWorkspaceOwner = async (workspace_id: number, workspace_name: string, address: string, 
+    scw_address: string, safe_address: string, chain_id: number, safe_name: string) => {
+    await pool.query(`INSERT INTO workspace_owners VALUES 
+    ('${workspace_id}', '${workspace_name}', '${address}', '${scw_address}', '${safe_address}', '${chain_id}', '${safe_name}')`);
+        
+}
 
+export const authorizeOwner = async (address: string) => {
+    let results = await pool.query(`SELECT * FROM workspace_owners WHERE address = '${address}';`)
+    
+    return results.rows.length !== 0;
+        
+}
 
+export const refreshNonce = async (address: string) => {
+    const newNonce = createNonce(100);
+    await pool.query(`UPDATE gasless_login SET nonce = '${newNonce}' WHERE address = '${address}';`)
+
+    return newNonce;
+}
