@@ -5,7 +5,8 @@ import { WORKSPACE_REGISTRY_ADDRESS } from '../contracts/addresses';
 // @TODO add providers for the rest of the chains
 
 export const jsonRpcProviders = {
-	"80001": new ethers.providers.JsonRpcProvider('https://polygon-mumbai.g.alchemy.com/v2/lfupuQhoZXWzMzn_OJ_zD9RHK0exz_b4'),
+	"80001": new ethers.providers.JsonRpcProvider('https://polygon-mumbai.g.alchemy.com/v2/X6pnQlJfJq00b8MT53QihWBINEgHZHGp'),
+	"4": new ethers.providers.JsonRpcProvider("https://eth-rinkeby.alchemyapi.io/v2/4CCa54H4pABZcHMOMLJfRySfhMkvQFrs")
 }
 
 export const registerWebHook = async(authToken: string | undefined, apiKey: string) => {
@@ -69,7 +70,7 @@ export const addWorkspace = async(workspaceName: string, networkId: string, auth
 export const isWorkspaceOwner = async (ownerAddress: string, workspaceId: number, chainId: string) => {
 	const workspaceContract = new ethers.Contract(WORKSPACE_REGISTRY_ADDRESS[chainId],
         workspaceRegistryAbi, jsonRpcProviders[chainId]);
-	
+		
     const isOwner = await workspaceContract.isWorkspaceAdmin(workspaceId, ownerAddress);
 	
 	return isOwner;

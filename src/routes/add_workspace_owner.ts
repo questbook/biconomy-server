@@ -1,8 +1,7 @@
 import { Handler } from '../utils/make-api';
-import { addWorkspaceOwner, addUser, getValidNonce } from '../utils/pg-utils';
-import axios from 'axios';
+import { addWorkspaceOwner, addUser } from '../utils/pg-utils';
 import configEnv from '../utils/env';
-import { isWorkspaceOwner, registerWebHook } from '../utils/biconomy_register';
+import { isWorkspaceOwner } from '../utils/biconomy_register';
 
 configEnv()
 

@@ -1,4 +1,4 @@
-import { toNumber } from "lodash"
+import { toNumber, update } from "lodash"
 
 
 const EXPIRATION = 86400; // 1 day
@@ -60,7 +60,8 @@ export const addUser = async (address: string) => {
 
 export const addWorkspaceOwner = async (workspace_id: number, workspace_name: string, address: string, 
     scw_address: string, safe_address: string, chain_id: number, safe_name: string) => {
-    await pool.query(`INSERT INTO workspace_owners VALUES 
+    await pool.query(`INSERT INTO workspace_owners (workspace_id, workspace_name, webwallet_address, scw_address, safe_address,
+        chain_id, safe_name ) VALUES 
     ('${workspace_id}', '${workspace_name}', '${address}', '${scw_address}', '${safe_address}', '${chain_id}', '${safe_name}')`);
         
 }
@@ -77,4 +78,11 @@ export const refreshNonce = async (address: string) => {
     await pool.query(`UPDATE gasless_login SET nonce = '${newNonce}' WHERE address = '${address}';`)
 
     return newNonce;
+}
+
+export const chargeGas = async (workspace_id: number, amount: number) => {
+    const currentGasCharging = await pool.query(`SELECT payment_due FROM workspace_owners WHERE workspace_id=${workspace_id};`);
+    console.log(currentGasCharging.rows[0]);
+    const updatedGasCharging = currentGasCharging.rows[0].payment_due + amount;
+    await pool.query(`UPDATE workspace_owners SET payment_due = ${updatedGasCharging} WHERE workspace_id=${workspace_id};`);
 }

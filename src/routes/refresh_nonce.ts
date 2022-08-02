@@ -1,4 +1,3 @@
-import { ethers } from 'ethers'
 import { Handler } from '../utils/make-api'
 import { getValidNonce, refreshNonce } from '../utils/pg-utils';
 

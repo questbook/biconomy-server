@@ -7,6 +7,9 @@ export interface paths {
   "/check": {
     post: operations["check"];
   };
+  "/charge_gas": {
+    post: operations["charge_gas"];
+  };
   "/authorize_owner": {
     post: operations["authorize_owner"];
   };
@@ -49,6 +52,10 @@ export interface components {
     AddUserRequest: {
       webwallet_address: string;
     };
+    ChargeGasRequest: {
+      workspace_id: number;
+      amount: number;
+    };
     RefreshNonceRequest: {
       webwallet_address: string;
     };
@@ -81,6 +88,16 @@ export interface components {
       content: {
         "application/json": {
           authorize: boolean;
+        };
+      };
+    };
+    /** Charge gas for domain owners */
+    ChargeGasResponse: {
+      content: {
+        "application/json": {
+          authorize?: boolean;
+        } & {
+          status: unknown;
         };
       };
     };
@@ -134,6 +151,18 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["TransactionRequest"];
+      };
+    };
+  };
+  charge_gas: {
+    responses: {
+      200: components["responses"]["ChargeGasResponse"];
+      400: components["responses"]["ErrorResponse"];
+      500: components["responses"]["ErrorResponse"];
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ChargeGasRequest"];
       };
     };
   };

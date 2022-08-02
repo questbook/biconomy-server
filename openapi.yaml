@@ -28,6 +28,25 @@ paths:
         '500':
           $ref: '#/components/responses/ErrorResponse'
 
+  /charge_gas:
+    post:
+      operationId: charge_gas
+      summary: charge domain owners with gas used from gastank
+      tags:
+        - charge_gas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeGasRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChargeGasResponse'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+
   /authorize_owner:
     post:
       operationId: authorize_owner
@@ -196,6 +215,18 @@ components:
           minLength: 1
           maxLength: 50
 
+    ChargeGasRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - workspace_id
+        - amount
+      properties: 
+        workspace_id:
+          type: number
+        amount:
+          type: number
+
     RefreshNonceRequest:
       type: object
       additionalProperties: false
@@ -289,6 +320,19 @@ components:
             additionalProperties: false
             required:
               - authorize
+            properties: 
+              authorize:
+                type: boolean
+    
+    ChargeGasResponse:
+      description: Charge gas for domain owners
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - status
             properties: 
               authorize:
                 type: boolean

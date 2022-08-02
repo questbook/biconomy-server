@@ -6,4 +6,5 @@ export default {
 	check: async() => (await import('./check')).default,
 	authorize_owner: async() => (await import('./authorize_owner')).default,
 	refresh_nonce: async() => (await import('./refresh_nonce')).default,
+	charge_gas: async() => (await import('./charge_gas')).default
 }
