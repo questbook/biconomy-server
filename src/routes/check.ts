@@ -11,8 +11,6 @@ const check: Handler<'check'> = async(
 
 	const response = await subsidize(data.signedNonce, data.nonce, data.webwallet_address)
 
-	console.log(response)
-
 	if(response === false) {
 		return { isConditionPassed: false }
 	}

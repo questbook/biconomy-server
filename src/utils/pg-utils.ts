@@ -57,6 +57,7 @@ export const existsLogin = async(address: string, nonce: string) => {
 
 export const addUser = async(address: string) => {
 	const newNonce = createNonce(100)
+    console.log("adding nonce")
 	await pool.query(`INSERT INTO gasless_login VALUES ('${address}', '${newNonce}', ${EXPIRATION + new Date().getTime() / 1000});`)
 }
 
@@ -84,7 +85,8 @@ export const refreshNonce = async(address: string) => {
 
 export const chargeGas = async(workspace_id: number, amount: number) => {
 	const currentGasCharging = await pool.query(`SELECT payment_due FROM workspace_owners WHERE workspace_id=${workspace_id};`)
-	console.log(currentGasCharging.rows[0])
-	const updatedGasCharging = currentGasCharging.rows[0].payment_due + amount
-	await pool.query(`UPDATE workspace_owners SET payment_due = ${updatedGasCharging} WHERE workspace_id=${workspace_id};`)
+
+    const updatedGasCharging = currentGasCharging.rows[0].payment_due + amount
+
+    await pool.query(`UPDATE workspace_owners SET payment_due = ${updatedGasCharging} WHERE workspace_id=${workspace_id};`)
 }
