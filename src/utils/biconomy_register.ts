@@ -73,7 +73,7 @@ export const isWorkspaceOwner = async(ownerAddress: string, workspaceId: number,
 	const workspaceContract = new ethers.Contract(WORKSPACE_REGISTRY_ADDRESS[chainId],
 		workspaceRegistryAbi, jsonRpcProviders[chainId])
 
-	const isOwner = await workspaceContract.isWorkspaceAdmin(workspaceId, ownerAddress);
+	const isOwner = await workspaceContract.isWorkspaceAdmin(workspaceId, ownerAddress)
 
 	return isOwner
 }

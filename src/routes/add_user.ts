@@ -13,7 +13,7 @@ const add_user: Handler<'add_user'> = async(
 
 ) => {
 
-	addUser(webwallet_address)
+	await addUser(webwallet_address)
 
 	return { authorize: true }
 }
