@@ -30,9 +30,9 @@ const generateRoutesIndex = async() => {
 			indexTs += `\t${camelize(name)}: async() => (await import('${file}')).default,\n`
 		}
 	}
-	
+
 	indexTs += '}'
-	
+
 	await writeFile(join(ROUTES_FOLDER, 'index.ts'), indexTs)
 	console.log('updated routes')
 }

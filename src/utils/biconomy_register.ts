@@ -1,18 +1,20 @@
-import { ethers } from 'ethers';
-import workspaceRegistryAbi from '../contracts/abi/WorkspaceRegistryAbi.json';
-import { WORKSPACE_REGISTRY_ADDRESS } from '../contracts/addresses';
+import { ethers } from 'ethers'
+import workspaceRegistryAbi from '../contracts/abi/WorkspaceRegistryAbi.json'
+import { WORKSPACE_REGISTRY_ADDRESS } from '../contracts/addresses'
 
 // @TODO add providers for the rest of the chains
 
 export const jsonRpcProviders = {
-	"80001": new ethers.providers.JsonRpcProvider('https://polygon-mumbai.g.alchemy.com/v2/X6pnQlJfJq00b8MT53QihWBINEgHZHGp'),
-	"4": new ethers.providers.JsonRpcProvider("https://eth-rinkeby.alchemyapi.io/v2/4CCa54H4pABZcHMOMLJfRySfhMkvQFrs")
+	'80001': new ethers.providers.JsonRpcProvider('https://polygon-mumbai.g.alchemy.com/v2/X6pnQlJfJq00b8MT53QihWBINEgHZHGp'),
+	'4': new ethers.providers.JsonRpcProvider('https://eth-rinkeby.alchemyapi.io/v2/4CCa54H4pABZcHMOMLJfRySfhMkvQFrs'),
+	'5': new ethers.providers.JsonRpcProvider('https://eth-goerli.g.alchemy.com/v2/Hr6VkBfmbJIhEW3fHJnl0ujE0xmWxcqH')
 }
 
 export const registerWebHook = async(authToken: string | undefined, apiKey: string) => {
-    if(!authToken){
-        return "No Auth Token Found!";
-    }
+	if(!authToken) {
+		return 'No Auth Token Found!'
+	}
+
 	const url = 'https://api.biconomy.io/api/v1/workspace/register-webhook'
 
 	const formData = new URLSearchParams({
@@ -42,7 +44,7 @@ export const registerWebHook = async(authToken: string | undefined, apiKey: stri
 
 export const addWorkspace = async(workspaceName: string, networkId: string, authToken: string | undefined) => {
 	if(!authToken) {
-        throw new Error("No Auth Token Found!")
+		throw new Error('No Auth Token Found!')
 	}
 
 	const url = 'https://api.biconomy.io/api/v1/workspace/public-api/create-workspace'
@@ -64,14 +66,14 @@ export const addWorkspace = async(workspaceName: string, networkId: string, auth
 
 	console.log(resJson.data)
 
-	return {apiKey: resJson.data.apiKey, fundingKey: resJson.data.fundingKey.toString()};
+	return { apiKey: resJson.data.apiKey, fundingKey: resJson.data.fundingKey.toString() }
 }
 
-export const isWorkspaceOwner = async (ownerAddress: string, workspaceId: number, chainId: string) => {
+export const isWorkspaceOwner = async(ownerAddress: string, workspaceId: number, chainId: string) => {
 	const workspaceContract = new ethers.Contract(WORKSPACE_REGISTRY_ADDRESS[chainId],
-        workspaceRegistryAbi, jsonRpcProviders[chainId]);
-		
-    const isOwner = await workspaceContract.isWorkspaceAdmin(workspaceId, ownerAddress);
-	
-	return isOwner;
+		workspaceRegistryAbi, jsonRpcProviders[chainId])
+
+	const isOwner = await workspaceContract.isWorkspaceAdmin(workspaceId, ownerAddress)
+
+	return isOwner
 }

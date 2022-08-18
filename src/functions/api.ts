@@ -1,4 +1,4 @@
-import configEnv from '../utils/env';
+import configEnv from '../utils/env'
 configEnv()
 
 import { APIGatewayProxyEvent, Context } from 'aws-lambda'

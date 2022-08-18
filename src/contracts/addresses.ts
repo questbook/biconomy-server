@@ -1,4 +1,4 @@
-import CHAIN_INFO from './chainInfo.json';
+import CHAIN_INFO from './chainInfo.json'
 
 export const WORKSPACE_REGISTRY_ADDRESS = compileAddresses('workspace')
 export const APPLICATION_REGISTRY_ADDRESS = compileAddresses('applications')

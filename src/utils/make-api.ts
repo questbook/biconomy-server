@@ -109,7 +109,7 @@ function errorHandlingWrap<O extends Operation>(getHandler: () => Handler<O> | P
 		} catch(error) {
 			let errorDescription: string
 			let data: any
-			
+
 			trace = error.stack
 			if(error instanceof Boom) {
 				errorDescription = error.message
@@ -161,8 +161,8 @@ export default (
 	routes: { [K in Operation]: () => Promise<Handler<K>> | Handler<K> }
 ) => {
 	// create api with your definition file or object
-	const api = new OpenAPIBackend({ 
-		definition, 
+	const api = new OpenAPIBackend({
+		definition,
 		quick: process.env.NODE_ENV === 'production',
 	})
 
@@ -215,9 +215,9 @@ export default (
 		}),
 		...Object.keys(routes).reduce(
 			(dict, key) => {
-				dict[key] =  errorHandlingWrap(routes[key])
+				dict[key] = errorHandlingWrap(routes[key])
 				return dict
-			}, 
+			},
 			{}
 		)
 	})

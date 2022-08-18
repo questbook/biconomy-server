@@ -63,10 +63,8 @@ export interface components {
       scw_address: string;
       webwallet_address: string;
       workspace_id: number;
-      workspace_name: string;
       chain_id: string;
       safe_address: string;
-      safe_name: string;
     };
     AuthorizeOwnerRequest: {
       webwallet_address: string;

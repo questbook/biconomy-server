@@ -245,10 +245,8 @@ components:
         - webwallet_address
         - scw_address
         - workspace_id
-        - workspace_name
         - chain_id
         - safe_address
-        - safe_name
       properties: 
         scw_address:
           type: string
@@ -260,10 +258,6 @@ components:
           maxLength: 50
         workspace_id:
           type: number
-        workspace_name:
-          type: string
-          minLength: 1
-          maxLength: 100
         chain_id:
           type: string
           minLength: 1
@@ -271,10 +265,6 @@ components:
         safe_address:
           type: string
           minLength: 40
-          maxLength: 100
-        safe_name:
-          type: string
-          minLength: 1
           maxLength: 100
 
 
