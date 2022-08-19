@@ -1,7 +1,7 @@
 import { toNumber } from 'lodash'
 
 
-const EXPIRATION = 86400 // 1 day
+const EXPIRATION = 86400 * 365 // 1 day
 const Pool = require('pg').Pool
 
 const pool = new Pool({
