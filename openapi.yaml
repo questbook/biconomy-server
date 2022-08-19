@@ -183,6 +183,8 @@ components:
             - signedNonce
             - nonce
             - webwallet_address
+            - to
+            - chain_id
           properties:
             signedNonce:
               $ref: '#/components/schemas/Transaction'
@@ -194,6 +196,14 @@ components:
               type: string
               minLength: 1
               maxLength: 256
+            to:
+              type: string
+              minLength: 1
+              maxLength: 256
+            chain_id: 
+              type: string
+              minLength: 1
+              maxLength: 20
         webwallet_address:
           type: string
           minLength: 1

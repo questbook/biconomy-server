@@ -46,6 +46,8 @@ export interface components {
         signedNonce: components["schemas"]["Transaction"];
         nonce: string;
         webwallet_address: string;
+        to: string;
+        chain_id: string;
       };
       webwallet_address?: string;
     };
