@@ -236,6 +236,7 @@ components:
           type: number
         amount:
           type: number
+          format: float
 
     RefreshNonceRequest:
       type: object
