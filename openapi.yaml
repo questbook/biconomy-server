@@ -230,13 +230,13 @@ components:
       additionalProperties: false
       required:
         - workspace_id
-        - chain_id
+        # - chain_id
         - amount
       properties: 
         workspace_id:
           type: number
-        chain_id:
-          type: number
+        # chain_id:
+        #   type: number
         amount:
           type: number
           format: float
