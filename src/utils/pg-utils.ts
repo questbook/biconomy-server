@@ -100,8 +100,8 @@ export const refreshNonce = async(address: string) => {
 	return newNonce
 }
 
-export const chargeGas = async(workspace_id: number, amount: number) => {
-	const currentGasCharging = await pool.query(`SELECT payment_due FROM workspace_owners WHERE workspace_id=${workspace_id};`)
+export const chargeGas = async(workspace_id: number, chain_id: number, amount: number) => {
+	const currentGasCharging = await pool.query(`SELECT payment_due FROM workspace_owners WHERE workspace_id=${workspace_id} AND chain_id = ${chain_id};`)
 
 	const updatedGasCharging = currentGasCharging.rows[0].payment_due + amount
 
