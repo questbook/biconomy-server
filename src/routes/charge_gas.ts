@@ -7,7 +7,7 @@ configEnv()
 const charge_gas: Handler<'charge_gas'> = async(
 	{
 		workspace_id,
-		// chain_id,
+		chain_id,
 		amount
 	},
 	{ },
@@ -18,7 +18,7 @@ const charge_gas: Handler<'charge_gas'> = async(
 	// amount is given in ether
 	const etherAmount = Number(amount)
 
-	await chargeGas(workspace_id, etherAmount)
+	await chargeGas(workspace_id, chain_id, etherAmount)
 
 	return { status: true }
 }

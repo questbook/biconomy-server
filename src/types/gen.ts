@@ -56,6 +56,7 @@ export interface components {
     };
     ChargeGasRequest: {
       workspace_id: number;
+      chain_id: number;
       /** Format: float */
       amount: number;
     };
