@@ -1,5 +1,6 @@
 import {
 	APPLICATION_REGISTRY_ADDRESS, APPLICATION_REVIEW_REGISTRY_ADDRESS,
+	COMMUNICATION_ADDRESS,
 	GRANT_FACTORY_ADDRESS,
 	WORKSPACE_REGISTRY_ADDRESS } from '../contracts/addresses'
 import { Handler } from '../utils/make-api'
@@ -15,7 +16,8 @@ const check: Handler<'check'> = async(
 	if(WORKSPACE_REGISTRY_ADDRESS[data.chain_id] !== data.to &&
 		GRANT_FACTORY_ADDRESS[data.chain_id] !== data.to &&
 		APPLICATION_REGISTRY_ADDRESS[data.chain_id] !== data.to &&
-		APPLICATION_REVIEW_REGISTRY_ADDRESS[data.chain_id] !== data.to) {
+		APPLICATION_REVIEW_REGISTRY_ADDRESS[data.chain_id] !== data.to &&
+		COMMUNICATION_ADDRESS[data.chain_id] !== data.to) {
 		throw new Error('Not allowed to interact with the provided contract!')
 	}
 
