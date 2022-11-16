@@ -107,6 +107,7 @@ function errorHandlingWrap<O extends Operation>(getHandler: () => Handler<O> | P
 
 			result.statusCode = 200
 		} catch(error) {
+			console.log(error)
 			let errorDescription: string
 			let data: any
 
